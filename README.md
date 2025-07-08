@@ -2,7 +2,7 @@
 A bot for the VB-Audio Discord server.
 
 > [!CAUTION]
-> This bot only will work on 1 server
+> This bot only will work with the 'Public Bot' toggle disabled
 >
 ## Installation
 1. Install dependecies
