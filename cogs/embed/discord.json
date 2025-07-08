@@ -1,0 +1,8 @@
+{
+    "embed": {
+        "title": "Settings for Discord Mic to Sound Exactly Like Voicemeeter Mic",
+        "description": "If you want your mic to sound exactly how you hear it in Voicemeeter or if you're playing sounds through your mic, go ahead and follow this (https://imgur.com/a/oyXVQfL).\n\nDon’t trust the “Check Mic” section of Discord, it won't be a good representation of how your mic sounds. Test it within our Discord with `!testmic`",
+        "image": "https://i.imgur.com/U9qcrDl.gif"
+    
+    }
+}

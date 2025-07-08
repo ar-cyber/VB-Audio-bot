@@ -1,0 +1,11 @@
+{
+    "id": "roles",
+    "embed": {
+        "title": "VB-Audio Roles",
+        "description": "# Many roles are used here.\n Most of these roles are decorative but some are actually used.",
+        "fields": [
+            {"title": "Decorative Roles", "value": "Voicemeeter, Voicemeeter Banana, Voicemeeter Potato: Indicates what Voicemeeter version/product you use.\nVBMatrix: You use VBMatrix\nMT: You use MT."},
+            {"title": "Functional Roles", "value": "Helper: Expert users using their time to help other users who may be inexperienced.\nGuardian: Moderators dedicated to keeping the server safe.\nModerator: Admins.\n**Please do not beg for these roles**"} 
+        ]
+    }
+}
