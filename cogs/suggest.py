@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 from discord.ext.commands import Cog
-from discord import app_commands
+
 import utils.config
 class Suggest(Cog):
     def __init__(self, bot):
@@ -16,14 +16,14 @@ class Suggest(Cog):
             self.downvotes = 0
             self.votes = {}  # user_id: "up" or "down"
 
-        async def _check_author(self, interaction: discord.Interaction):
+        async def _check_author(self, interaction: discord.ApplicationContext):
             if interaction.user.id == self.author_id:
-                await interaction.response.send_message("You cannot vote on your own suggestion.", ephemeral=True)
+                await interaction.respond("You cannot vote on your own suggestion.", ephemeral=True)
                 return False
             return True
 
         @discord.ui.button(label="👍 0", style=discord.ButtonStyle.green, custom_id="vote:up")
-        async def upvote(self, interaction: discord.Interaction, button: discord.ui.Button):
+        async def upvote(self, interaction: discord.ApplicationContext, button: discord.ui.Button):
             if not await self._check_author(interaction):
                 return
 
@@ -31,17 +31,17 @@ class Suggest(Cog):
             previous_vote = self.votes.get(user_id)
 
             if previous_vote == "up":
-                await interaction.response.send_message("You already upvoted!", ephemeral=True)
+                await interaction.respond("You already upvoted!", ephemeral=True)
                 return
             elif previous_vote == "down":
                 self.downvotes -= 1
                 self.upvotes += 1
                 self.votes[user_id] = "up"
-                await interaction.response.send_message("Changed your vote to Upvote!", ephemeral=True)
+                await interaction.respond("Changed your vote to Upvote!", ephemeral=True)
             else:
                 self.upvotes += 1
                 self.votes[user_id] = "up"
-                await interaction.response.send_message("You upvoted!", ephemeral=True)
+                await interaction.respond("You upvoted!", ephemeral=True)
 
             button.label = f"👍 {self.upvotes}"
             downvote_button = self.children[1]
@@ -50,7 +50,7 @@ class Suggest(Cog):
             await interaction.message.edit(view=self)
 
         @discord.ui.button(label="👎 0", style=discord.ButtonStyle.red, custom_id="vote:down")
-        async def downvote(self, interaction: discord.Interaction, button: discord.ui.Button):
+        async def downvote(self, interaction: discord.ApplicationContext, button: discord.ui.Button):
             if not await self._check_author(interaction):
                 return
 
@@ -58,17 +58,17 @@ class Suggest(Cog):
             previous_vote = self.votes.get(user_id)
 
             if previous_vote == "down":
-                await interaction.response.send_message("You already downvoted!", ephemeral=True)
+                await interaction.respond("You already downvoted!", ephemeral=True)
                 return
             elif previous_vote == "up":
                 self.upvotes -= 1
                 self.downvotes += 1
                 self.votes[user_id] = "down"
-                await interaction.response.send_message("Changed your vote to Downvote!", ephemeral=True)
+                await interaction.respond("Changed your vote to Downvote!", ephemeral=True)
             else:
                 self.downvotes += 1
                 self.votes[user_id] = "down"
-                await interaction.response.send_message("You downvoted!", ephemeral=True)
+                await interaction.respond("You downvoted!", ephemeral=True)
 
             button.label = f"👎 {self.downvotes}"
             upvote_button = self.children[0]
@@ -81,15 +81,15 @@ class Suggest(Cog):
             
             self.user = user
             self.client = client
-            self.title_suggest = discord.ui.TextInput(label = "Please enter the title for your suggestion", max_length=60, required = True)
-            self.body = discord.ui.TextInput(label = "Please describe your issue", required=True, max_length=999)
-            self.image = discord.ui.TextInput(label = "OPTIONAL: Add a image of your suggestion", required=False, max_length = 100)
+            self.title_suggest = discord.ui.InputText(label = "Please enter the title for your suggestion", max_length=60, required = True)
+            self.body = discord.ui.InputText(label = "Please describe your issue", required=True, max_length=999)
+            self.image = discord.ui.InputText(label = "OPTIONAL: Add a image of your suggestion", required=False, max_length = 100)
             
             super().__init__(title = "Enter the suggestion details")
             self.add_item(self.title_suggest)
             self.add_item(self.body)
             self.add_item(self.image)
-        async def on_submit(self, ctx: discord.Interaction):
+        async def on_submit(self, ctx: discord.ApplicationContext):
             embed = discord.Embed(title = f"Suggestion from {self.user.name}: {self.title_suggest.value}", description=self.body.value)
             embed.set_image(url=self.image)
 
@@ -102,11 +102,11 @@ class Suggest(Cog):
             await message.create_thread(
                 name=self.title_suggest.value
             )
-            await ctx.response.send_message("Successfully sent suggestion.", ephemeral=True)
+            await ctx.respond("Successfully sent suggestion.", ephemeral=True)
             
 
-    @app_commands.command(name = "suggest", description = "Make a suggestion")
-    async def _suggest(self, ctx: discord.Interaction):
+    @commands.slash_command(name = "suggest", description = "Make a suggestion")
+    async def _suggest(self, ctx: discord.ApplicationContext):
         await ctx.response.send_modal(self.SuggestModal(self.client, ctx.user))
 
 async def setup(bot):
