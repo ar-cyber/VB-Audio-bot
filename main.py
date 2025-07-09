@@ -3,7 +3,7 @@ from discord.ext import commands
 import os
 import utils.config
 from utils.checks import *
-client = commands.Bot(command_prefix=utils.config.config['setup']['command_prefix'], intents=discord.Intents.all())
+client = commands.Bot(command_prefix=utils.config.config['setup']['command_prefix'], intents=discord.Intents.all(), activity=discord.CustomActivity(name = "Voice your meeters | vb-audio.com", emoji="🎙"), status=discord.Status.dnd)
 
 
 
