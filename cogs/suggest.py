@@ -105,11 +105,11 @@ class Suggest(Cog):
             await ctx.respond("Successfully sent suggestion.", ephemeral=True)
             
 
-    @commands.slash_command(name = "suggest", description = "Make a suggestion")
+    @discord.slash_command(name = "suggest", description = "Make a suggestion")
     async def _suggest(self, ctx: discord.ApplicationContext):
         await ctx.response.send_modal(self.SuggestModal(self.client, ctx.user))
 
-async def setup(bot):
+def setup(bot):
     bot.add_view(Suggest.VoteView(0))
     print("cogs.suggest: Loaded persistant view") 
-    await bot.add_cog(Suggest(bot))
+    bot.add_cog(Suggest(bot))

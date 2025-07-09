@@ -26,6 +26,6 @@ If you've done all of these, good job! We'll be with you soon!
                 await thread.send(body)
             
 
-async def setup(bot):
+def setup(bot):
     print(bot)
-    await bot.add_cog(Threads(bot))
+    bot.add_cog(Threads(bot))

@@ -37,8 +37,8 @@ class Report(Cog):
             )
             await ctx.respond("Successfully sent report.", ephemeral=True)
             
-    @commands.slash_command(name = "report", description = "Report a user")
+    @discord.slash_command(name = "report", description = "Report a user")
     async def _report(self, ctx: discord.ApplicationContext):
         await ctx.response.send_modal(self.ReportModal(self.client, ctx.user))
-async def setup(bot):
-    await bot.add_cog(Report(bot))
+def setup(bot):
+    bot.add_cog(Report(bot))

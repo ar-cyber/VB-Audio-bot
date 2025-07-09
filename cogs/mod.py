@@ -6,7 +6,7 @@ class Moderation(Cog):
     def __init__(self, bot):
         self.client = bot
     
-    @commands.slash_command(name = "kick", description = "Boot a user from the Discord")
+    @discord.slash_command(name = "kick", description = "Boot a user from the Discord")
     @commands.has_permissions(kick_members = True)
     async def _kick(self, ctx: discord.ApplicationContext, member: discord.Member, reason: str="No reason provided"):
         if member == self.client.user:
@@ -33,7 +33,7 @@ class Moderation(Cog):
                 description = f"Successfully kicked {member.name} for the following reason: {reason}"
             ), ephemeral=True)
 
-    @commands.slash_command(name = "ban", description = "USE THE ALMIGHTY BAN HAMMER")
+    @discord.slash_command(name = "ban", description = "USE THE ALMIGHTY BAN HAMMER")
     @commands.has_permissions(ban_members = True)
     async def _ban(self, ctx: discord.ApplicationContext, member: discord.Member, reason: str="No reason provided"):
         if member == self.client.user:
@@ -60,7 +60,7 @@ class Moderation(Cog):
                 description = f"Successfully banned {member.name} for the following reason: {reason}"
             ), ephemeral=True)
     
-    @commands.slash_command(name = "unban", description = "REVERT THE ALMIGHTY BAN HAMMER")
+    @discord.slash_command(name = "unban", description = "REVERT THE ALMIGHTY BAN HAMMER")
     @commands.has_permissions(ban_members = True)
     async def _unban(self, ctx: discord.ApplicationContext, member: discord.User, reason: str="No reason provided"):
         if member == self.client.user:
@@ -75,5 +75,5 @@ class Moderation(Cog):
                 description = f"Successfully unbanned {member.name} for the following reason: {reason}"
             ), ephemeral=True)
 
-async def setup(bot):
-    await bot.add_cog(Moderation(bot))
+def setup(bot):
+    bot.add_cog(Moderation(bot))

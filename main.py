@@ -14,7 +14,8 @@ async def on_ready():
         if filename.endswith('.py') and not filename.startswith('_'):
             cog_name = f'cogs.{filename[:-3]}'
             try:
-                await client.load_extension(cog_name)
+                # print(type(cog_name))
+                client.load_extension(cog_name)
                 print(f'[SUCCESS] Loaded extension {cog_name}')
             except Exception as e:
                 print(f'[ERROR] Failed to load {cog_name}: {e}')

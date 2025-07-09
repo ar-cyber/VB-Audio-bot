@@ -6,7 +6,7 @@ class Tag(Cog):
     def __init__(self, bot):
         self.client = bot
     
-    @commands.slash_command(name = "tag", description = "Show a tag (please ask robinand to add the tag)")
+    @discord.slash_command(name = "tag", description = "Show a tag (please ask robinand to add the tag)")
     async def _tagslash(self, ctx: discord.ApplicationContext, tag: str):
         
         found = False
@@ -52,7 +52,7 @@ class Tag(Cog):
             embed.set_image(url = f['image'])
         await ctx.send(embed=embed)
 
-    @commands.slash_command(name = "tags", description = "List the tags")
+    @discord.slash_command(name = "tags", description = "List the tags")
     async def _tagsslash(self, ctx: discord.ApplicationContext):
         embed = discord.Embed(title = "Tags", description = "View the tags!")
         for item in os.listdir('cogs/embed'):
@@ -79,5 +79,5 @@ class Tag(Cog):
         await ctx.send(embed=embed)
 
 
-async def setup(bot):
-    await bot.add_cog(Tag(bot))
+def setup(bot):
+    bot.add_cog(Tag(bot))

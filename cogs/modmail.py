@@ -65,12 +65,12 @@ class Modmail(Cog):
 
 
 
-    @commands.slash_command(name = "ping", description="Pong! Check the latency of the bot.")
+    @discord.slash_command(name = "ping", description="Pong! Check the latency of the bot.")
     async def ping(self, ctx: discord.ApplicationContext):
         await ctx.respond(f'PONG!\nLatency: {round(self.client.latency * 1000)}ms', ephemeral=True)
     
     
-    @commands.slash_command(name = "claim", description = "Claim this modmail message")
+    @discord.slash_command(name = "claim", description = "Claim this modmail message")
     @commands.has_permissions(moderate_members=True)
     @commands.guild_only()
     async def _reply(self, ctx: discord.ApplicationContext):
@@ -92,7 +92,7 @@ class Modmail(Cog):
                 pass
         await ctx.respond("You're not in a modmail channel!", ephemeral=True)
 
-    @commands.slash_command(name = "close", description="Close this ticket.")
+    @discord.slash_command(name = "close", description="Close this ticket.")
     @commands.has_permissions(moderate_members=True)
     @commands.guild_only()
     async def _close(self, ctx: discord.ApplicationContext):
@@ -111,10 +111,10 @@ class Modmail(Cog):
             else:
                 pass
         await ctx.respond("You're not in a modmail channel!", ephemeral=True)
-    @commands.slash_command(name = "delete", description = "Delete a modmail ticket. IRREVESIBLE!")
+    @discord.slash_command(name = "delete", description = "Delete a modmail ticket. IRREVESIBLE!")
     @commands.has_permissions(moderate_members = True)
     @commands.guild_only()
-    @app_commands.describe(sure = "Write `I'm sure` if you really want to.")
+    # @app_commands.describe(sure = "Write `I'm sure` if you really want to.")
     async def _del(self, ctx: discord.ApplicationContext, sure: str):
         if sure != "I'm sure":
             return await ctx.respond("`I'm sure` was not written in the sure argument.")
@@ -130,5 +130,5 @@ class Modmail(Cog):
         else:
             return await ctx.respond("You're not in a ticket channel!", ephemeral=True)
         
-async def setup(bot):
-    await bot.add_cog(Modmail(bot))
+def setup(bot):
+    bot.add_cog(Modmail(bot))
