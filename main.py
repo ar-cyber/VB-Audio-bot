@@ -19,6 +19,10 @@ async def on_ready():
                 print(f'[SUCCESS] Loaded extension {cog_name}')
             except Exception as e:
                 print(f'[ERROR] Failed to load {cog_name}: {e}')
+    print(client.auto_sync_commands)
+    if client.auto_sync_commands:
+        print("[INFO] Syncing!")
+        await client.sync_commands()
     print(f"[SUCCESS] Online as {client.user.name}")
 
 @client.slash_command(name = "info", description = "View the info of the bot")
