@@ -1,1 +1,2 @@
-discord
+py-cord
+py-cord[voice]
