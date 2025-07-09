@@ -1,15 +1,17 @@
 import discord
 from discord.ext import commands, tasks
 from discord.ext.commands import Cog
-from discord import app_commands
+
 import utils.config
-class GitHub_SEQTA(Cog):
+class Threads(Cog):
     def __init__(self, bot):
         self.client = bot
-
-    @commands.Cog.listener()
+    
+    @Cog.listener()
     async def on_thread_create(self, thread: discord.Thread):
         for forum in utils.config.config['forums']['forumids'].split(','): 
+            print(forum)
+            print(thread.parent.id)
             if thread.parent.type == discord.ChannelType.forum and thread.parent.id == int(forum): 
                 print(f"New forum post detected: {thread.name}")
                 body = f"""# Welcome <@{thread.owner_id}> to the VB-Audio bug reports forum. A helper will be with you soon. 
@@ -21,8 +23,8 @@ class GitHub_SEQTA(Cog):
 If you've done all of these, good job! We'll be with you soon!
 
 """         
-                thread.send(body)
+                await thread.send(body)
             
 
 async def setup(bot):
-    await bot.add_cog(GitHub_SEQTA(bot))
+    await bot.add_cog(Threads(bot))
