@@ -24,7 +24,19 @@ async def on_ready():
     await client.tree.sync()
     print(f"Online as {client.user.name}")
 
-
+@client.tree.command(name = "info", description = "View the info of the bot")
+async def _info(ctx: discord.Interaction):
+    embed = discord.Embed(title = "VB-Audio Bot", description="This bot was custom-made for the VB-Audio Discord server")
+    embed.set_thumbnail(url='https://i.imgur.com/GW0cFSw.png')
+    embed.add_field(name = "Features", value = """- Working tag system
+- Modmail
+- Basic moderation commands
+- Suggestion system
+- Report system
+- (Not in this build): GitHub integration
+""")
+    embed.set_footer(text=f"Created with ♥ by `robin_the_andrew`")
+    await ctx.response.send_message(embed=embed)
 
 
 run_pb_check()
