@@ -1,14 +1,13 @@
 import discord
 from discord.ext import commands
 from discord.ext.commands import Cog
-from discord import app_commands
 import json, os
 class Tag(Cog):
     def __init__(self, bot):
         self.client = bot
     
-    @app_commands.command(name = "tag", description = "Show a tag (please ask robinand to add the tag)")
-    async def _tagslash(self, ctx: discord.Interaction, tag: str):
+    @discord.slash_command(name = "tag", description = "Show a tag (please ask robinand to add the tag)")
+    async def _tagslash(self, ctx: discord.ApplicationContext, tag: str):
         
         found = False
         for item in os.listdir('cogs/embed'):
@@ -19,7 +18,7 @@ class Tag(Cog):
                 found = True
                 break
         if not found:
-            return await ctx.response.send_message("This tag does not exist!", ephemeral=True)
+            return await ctx.respond("This tag does not exist!", ephemeral=True)
         f = json.load(open(f"cogs/embed/{tagitem}", 'rb'))['embed']
 
         embed = discord.Embed(title = f['title'], description = f['description'])
@@ -28,7 +27,7 @@ class Tag(Cog):
                 embed.add_field(name = field['title'], value = field['value'], inline = True if ('inline' in f) and f['inline'] else False)
         if 'image' in f:
             embed.set_image(url = f['image'])
-        await ctx.response.send_message(embed=embed)
+        await ctx.respond(embed=embed)
 
     @commands.command(name = "tag", description = "Show a tag (please ask robinand to add the tag)")
     async def _tag(self, ctx, tag: str):
@@ -53,8 +52,8 @@ class Tag(Cog):
             embed.set_image(url = f['image'])
         await ctx.send(embed=embed)
 
-    @app_commands.command(name = "tags", description = "List the tags")
-    async def _tagsslash(self, ctx: discord.Interaction):
+    @discord.slash_command(name = "tags", description = "List the tags")
+    async def _tagsslash(self, ctx: discord.ApplicationContext):
         embed = discord.Embed(title = "Tags", description = "View the tags!")
         for item in os.listdir('cogs/embed'):
             embed.add_field(name = f'{json.load(open(f'cogs/embed/{item}', 'rb'))['embed']['title']}', value = f"""
@@ -62,7 +61,7 @@ class Tag(Cog):
     Run `/tag {item.replace('.json', '')}` or `!tag {item.replace('.json', '')}` to view this tag!
 
     """, inline=True)
-        await ctx.response.send_message(embed=embed)
+        await ctx.respond(embed=embed)
 
     @commands.command(name = "tags", description = "List the tags")
     async def _tags(self, ctx):
@@ -80,5 +79,5 @@ class Tag(Cog):
         await ctx.send(embed=embed)
 
 
-async def setup(bot):
-    await bot.add_cog(Tag(bot))
+def setup(bot):
+    bot.add_cog(Tag(bot))

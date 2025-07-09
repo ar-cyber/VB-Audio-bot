@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 from discord.ext.commands import Cog
-from discord import app_commands
+
 from utils.config import config
 import json
 import random
@@ -65,37 +65,37 @@ class Modmail(Cog):
 
 
 
-    @app_commands.command(name = "ping", description="Pong! Check the latency of the bot.")
-    async def ping(self, ctx: discord.Interaction):
-        await ctx.response.send_message(f'PONG!\nLatency: {round(self.client.latency * 1000)}ms', ephemeral=True)
+    @discord.slash_command(name = "ping", description="Pong! Check the latency of the bot.")
+    async def ping(self, ctx: discord.ApplicationContext):
+        await ctx.respond(f'PONG!\nLatency: {round(self.client.latency * 1000)}ms', ephemeral=True)
     
     
-    @app_commands.command(name = "claim", description = "Claim this modmail message")
+    @discord.slash_command(name = "claim", description = "Claim this modmail message")
     @commands.has_permissions(moderate_members=True)
     @commands.guild_only()
-    async def _reply(self, ctx: discord.Interaction):
+    async def _reply(self, ctx: discord.ApplicationContext):
         data = json.load(open('cogs/modmemory.json', 'r'))
         for item in data['sessions']:
             if ctx.channel.name == item['text_channel']:
                 if item['claimedby'] == ctx.user.id:
-                    return await ctx.response.send_message("You've already claimed this ticket!", ephemeral=True)
+                    return await ctx.respond("You've already claimed this ticket!", ephemeral=True)
                 if item['claimedby'] != "":
-                    return await ctx.response.send_message("Someone's already claimed this ticket!", ephemeral=True)
+                    return await ctx.respond("Someone's already claimed this ticket!", ephemeral=True)
                 user = await self.client.fetch_user(item['user'])
                 await user.send(f"# **{str(ctx.user)} | {str(ctx.user.id)}** has claimed this ticket")
                 await ctx.channel.send(f"# **{str(ctx.user)} | {str(ctx.user.id)}** has claimed this ticket")
                 data['sessions'][data['sessions'].index(item)]['claimedby'] == ctx.user.id
                 with open('cogs/modmemory.json', 'w') as fp:
                     json.dump(data, fp)
-                return await ctx.response.send_message("Sucessfully claimed the ticket!", ephemeral=True)
+                return await ctx.respond("Sucessfully claimed the ticket!", ephemeral=True)
             else:
                 pass
-        await ctx.response.send_message("You're not in a modmail channel!", ephemeral=True)
+        await ctx.respond("You're not in a modmail channel!", ephemeral=True)
 
-    @app_commands.command(name = "close", description="Close this ticket.")
+    @discord.slash_command(name = "close", description="Close this ticket.")
     @commands.has_permissions(moderate_members=True)
     @commands.guild_only()
-    async def _close(self, ctx: discord.Interaction):
+    async def _close(self, ctx: discord.ApplicationContext):
         data = json.load(open('cogs/modmemory.json', 'r'))
         for item in data['sessions']:
             if ctx.channel.name == item['text_channel']:
@@ -107,28 +107,28 @@ class Modmail(Cog):
                 data['sessions'].remove(item)
                 with open('cogs/modmemory.json', 'w') as fp:
                     json.dump(data, fp)
-                return await ctx.response.send_message("Sucessfully closed the modmail!", ephemeral=True)
+                return await ctx.respond("Sucessfully closed the modmail!", ephemeral=True)
             else:
                 pass
-        await ctx.response.send_message("You're not in a modmail channel!", ephemeral=True)
-    @app_commands.command(name = "delete", description = "Delete a modmail ticket. IRREVESIBLE!")
+        await ctx.respond("You're not in a modmail channel!", ephemeral=True)
+    @discord.slash_command(name = "delete", description = "Delete a modmail ticket. IRREVESIBLE!")
     @commands.has_permissions(moderate_members = True)
     @commands.guild_only()
-    @app_commands.describe(sure = "Write `I'm sure` if you really want to.")
-    async def _del(self, ctx: discord.Interaction, sure: str):
+    # @app_commands.describe(sure = "Write `I'm sure` if you really want to.")
+    async def _del(self, ctx: discord.ApplicationContext, sure: str):
         if sure != "I'm sure":
-            return await ctx.response.send_message("`I'm sure` was not written in the sure argument.")
+            return await ctx.respond("`I'm sure` was not written in the sure argument.")
         data = json.load(open('cogs/modmemory.json', 'r'))
         for item in data['sessions']:
             if ctx.channel.name == item['text_channel']:
-                return await ctx.response.send_message("This modmail hasn't been closed (hint run `/close` before this)!", ephemeral=True)
+                return await ctx.respond("This modmail hasn't been closed (hint run `/close` before this)!", ephemeral=True)
             else:
                 pass
         if "mod-" in ctx.channel.name:
             await ctx.channel.delete()
-            return await ctx.response.send_message("Success!", ephemeral=True)
+            return await ctx.respond("Success!", ephemeral=True)
         else:
-            return await ctx.response.send_message("You're not in a ticket channel!", ephemeral=True)
+            return await ctx.respond("You're not in a ticket channel!", ephemeral=True)
         
-async def setup(bot):
-    await bot.add_cog(Modmail(bot))
+def setup(bot):
+    bot.add_cog(Modmail(bot))
